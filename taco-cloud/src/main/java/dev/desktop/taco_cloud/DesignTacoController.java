@@ -16,6 +16,11 @@ import dev.desktop.taco_cloud.Ingredient;
 import dev.desktop.taco_cloud.Taco;
 import dev.desktop.taco_cloud.Ingredient.Type;;
 
+@Slf4j
+@Controller
+// requests that the path is /design
+@RequestMapping("/design")
+@SessionAttributes("tacoOrder")
 public class DesignTacoController {
     
 }
