@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import dev.desktop.taco_cloud.Ingredient;
 import dev.desktop.taco_cloud.Taco;
 import dev.desktop.taco_cloud.Ingredient.Type;;
-
 @Slf4j
 @Controller
 // requests that the path is /design
@@ -23,4 +22,42 @@ import dev.desktop.taco_cloud.Ingredient.Type;;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
     
+    @ModelAttribute
+    public void addIngredientsToModel(Model model) {
+        // ingredients
+        List<Ingredient> ingredients = Arrays.asList(
+            new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
+            new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
+            new Ingredient("GRBF", "Ground Beef", Type.PROTIEN),
+            new Ingredient("CARN", "Carnitas", Type.PROTIEN),
+            new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
+            new Ingredient("LETC", "Lettuce", Type.VEGGIES),
+            new Ingredient("CHED", "Cheese", Type.CHEESE),
+            new Ingredient("JACK", "Monterrey Jack", Type.CHEESE),
+            new Ingredient("SLSA", "Salsa", Type.SAUCE),
+            new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
+        );
+        Type[] types = Ingredient.Type.values();
+        for (Type type : types) {
+            model.addAttribute(type.toString().toLowerCase(),
+                filterByType(ingredients, type));
+            }
+    }
+    // constructers?
+    @ModelAttribute(name = "tacoOrder")
+    public TacoOrder order() {
+        return new TacoOrder();
+    }
+    @ModelAttribute(name = "taco") 
+    public Taco taco() {
+        return new Taco();
+    }
+    // site map
+    @GetMapping 
+    public String showDesignForm() {
+        return "design";
+    }
+    private Iterable<Ingredient> filterByType(List<Ingredient> ingredients, Type type){
+        return ingredients.stream().filter(x-> x.getType().equals(type)).collect(Collectors.toList());
+    }
 }
